@@ -1,3 +1,6 @@
+// Load Environment Variables
+require('dotenv').config()
+
 const express = require('express');
 const path = require('path');
 const mongoose =  require('mongoose');
@@ -14,7 +17,7 @@ var util = require('./serverjs/util.js');
 var updatedb = require('./serverjs/updatecards.js');
 
 // Connect db
-mongoose.connect(config.database);
+mongoose.connect(config.database, {useNewUrlParser: true});
 let db = mongoose.connection;
 db.once('open', function()
 {
@@ -52,7 +55,7 @@ app.use(express.static(path.join(__dirname,'public')));
 
 // Express session middleware
 app.use(session({
-  secret:'vertical donkey gatorade helicopter',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
   cooke: {secure: true}

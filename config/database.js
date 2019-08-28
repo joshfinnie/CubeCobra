@@ -1,5 +1,4 @@
-module.exports =
-{
-  database:'mongodb://localhost:27017/nodecube',
-  secret:'incineraterazorsaturnwizard'
+module.exports = {
+  database: process.env.MONGODB_URL,
+  secret: process.env.SECRET
 }

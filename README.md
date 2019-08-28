@@ -19,36 +19,15 @@ Atom (optional): https://atom.io/
 
 ### Clone Project
 
-Clone the project into a folder of your choice. Then, you will need to add a folder adjacent to the project folder like this:
-  
-    .
-    ├── CubeCobra               # Cloned repository
-    └── cubecobrasecrets        # Secrets folder    
-        └── email.js            # Email secrets file
-        └── tcgplayer.js        # TCGPlayer API secrets file
-        
-In email.js, you can paste the following, and replace the fields with any gmail account you have access to. You only need to fill out these fields with real information if you need to create user account validation emails.
+Clone the project into a folder of your choice. Copy `.env-EXAMPLE` to `.env` and fill out your personal tokens. **NOTE** `TCG_PLAYER_PUBLIC_KEY` and `TCG_PLAYER_PRIVATE_KEY` can be left blank.
 
-    module.exports =
-    {
-      username:'YOUR_EMAIL',
-      password:'YOUR_PASSWORD'
-    }
+Once your `.env` file is filled out, run the following commands in the root of the cloned repository:
 
-In tcgplayer.js, you can paste the following. You only need to fill out these fields with real information if you need real card prices in your development environment.
-
-    module.exports =
-    {
-      Public_Key:'',
-      Private_Key:''
-    }
-
-Then, run the following commands in the root of the cloned repository:
-
-    npm install    
-    npm install nodemon -g
-    node force_update.js
-    nodemon
+```
+npm install    
+node force_update.js
+npm start
+```
 
 You can now open up a browser and connect to the app through: http://localhost:5000
 

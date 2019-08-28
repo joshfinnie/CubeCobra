@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
 const passport = require('passport');
-const emailconfig = require('../../cubecobrasecrets/email');
 const mailer = require("nodemailer");
 const fs = require('fs')
 
@@ -62,8 +61,8 @@ router.post('/lostpassword', function(req, res)
           var smtpTransport = mailer.createTransport({
               service: "Gmail",
               auth: {
-                  user: emailconfig.username,
-                  pass: emailconfig.password
+                  user: process.env.EMAIL_CONFIG_USERNAME,
+                  pass: process.env.EMAIL_CONFIG_PASSWORD
               }
           });
 
@@ -280,8 +279,8 @@ router.post('/register', function(req, res)
                           secure: true,
                           service: "Gmail",
                           auth: {
-                              user: emailconfig.username,
-                              pass: emailconfig.password
+                              user: process.env.EMAIL_CONFIG_USERNAME,
+                              pass: process.env.EMAIL_CONFIG_PASSWORD
                           }
                       });
 
