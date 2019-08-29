@@ -1,5 +1,6 @@
 const express = require('express');
 let mongoose = require('mongoose');
+const shortid = require('shortid');
 const request = require('request');
 const fs = require('fs');
 const fetch = require('node-fetch');
@@ -210,6 +211,7 @@ router.post('/add',ensureAuth, function(req,res)
           cube.owner_name = user.username;
           cube.date_updated = Date.now();
           cube.updated_string = cube.date_updated.toLocaleString("en-US");
+          cube.short_id = shortid.generate();
           cube = setCubeType(cube, carddb);
           cube.save(function(err)
           {
