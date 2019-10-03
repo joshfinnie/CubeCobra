@@ -417,6 +417,18 @@ app.use(function(req, res) {
   res.status(404).render('misc/404', {});
 });
 
+// This function will just console log out errors
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  next(err);
+});
+
+// This function will catch the errors and return a 500
+app.use(function (err, req, res, next) {
+  res.status(500);
+  res.render('error', { error: err  });
+});
+
 /*
 schedule.scheduleJob('0 0 * * *', function(){
   console.log("Starting midnight cardbase update...");
