@@ -1,8 +1,10 @@
+/* eslint-disable no-underscore-dangle */
 const carddb = require('../../serverjs/cards');
+
 const fixturesPath = 'fixtures';
 const firstLetterCount = 21;
 const fixtureCardCount = 99;
-var placeholderCard = {
+const placeholderCard = {
   set: '',
   collector_number: '',
   promo: false,
@@ -31,8 +33,8 @@ afterEach(() => {
 
 test('initializeCardDb loads files properly', () => {
   expect.assertions(6);
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
     expect(Object.keys(carddb.cardtree).length).toBe(firstLetterCount);
     expect(Object.keys(carddb.imagedict).length).toBe(fixtureCardCount);
     expect(Object.keys(carddb.cardimages).length).toBe(fixtureCardCount);
@@ -44,8 +46,8 @@ test('initializeCardDb loads files properly', () => {
 
 test('unloadCardDb unloads the card database correctly', () => {
   expect.assertions(6);
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
     carddb.unloadCardDb();
     expect(carddb.cardtree).toBe(undefined);
     expect(carddb.imagedict).toBe(undefined);
@@ -95,8 +97,8 @@ test('cardFromId returns a well-formed card object', () => {
     toughness: '3',
     type: 'Legendary Creature — Faerie Rogue',
   };
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
     const result = carddb.cardFromId(_id);
     expect(result).toEqual(expected);
   });
@@ -105,10 +107,10 @@ test('cardFromId returns a well-formed card object', () => {
 test('cardFromId returns a placeholder card object when given a nonexistent ID', () => {
   expect.assertions(1);
   const _id = 'not real';
-  var expected = placeholderCard;
+  const expected = placeholderCard;
   expected._id = _id;
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
     const result = carddb.cardFromId(_id);
     expect(result).toEqual(expected);
   });
@@ -154,8 +156,8 @@ test('getCardDetails returns a well-formed card object', () => {
     toughness: '3',
     type: 'Legendary Creature — Faerie Rogue',
   };
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
     const result = carddb.getCardDetails({
       cardID: _id,
     });
@@ -166,10 +168,10 @@ test('getCardDetails returns a well-formed card object', () => {
 test('getCardDetails returns a placeholder card object when given a nonexistent ID', () => {
   expect.assertions(1);
   const _id = 'not real';
-  var expected = placeholderCard;
+  const expected = placeholderCard;
   expected._id = _id;
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
     const result = carddb.getCardDetails({
       cardID: _id,
     });
@@ -197,8 +199,8 @@ test('normalizedName normalizes unicode correctly', () => {
 
 test('allIds correctly maps a cardname to an ID', () => {
   expect.assertions(2);
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
     const expected = 'ee4d196e-7ce4-4dc1-9d58-102a89aca2a4';
     const result = carddb.allIds({
       name: 'Rankle, Master of Pranks',
@@ -211,14 +213,14 @@ test('allIds correctly maps a cardname to an ID', () => {
 test('loadJSONFile loads a JSON file into the correct attribute', () => {
   expect.assertions(1);
   const attribute = 'testAttribute';
-  return carddb.loadJSONFile(fixturesPath + '/names.json', attribute).then(function() {
+  return carddb.loadJSONFile(`${fixturesPath}/names.json`, attribute).then(() => {
     expect(carddb[attribute].length).toBe(fixtureCardCount);
   });
 });
 
 test('getPlaceholderCard', () => {
   const _id = 'abckggght';
-  var expected = placeholderCard;
+  const expected = placeholderCard;
   expected._id = _id;
   expect(carddb.getPlaceholderCard(_id)).toEqual(expected);
 });

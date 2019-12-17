@@ -1,8 +1,11 @@
+/* eslint-disable no-underscore-dangle */
+const fs = require('fs');
 const rimraf = require('rimraf');
+
 const updatecards = require('../../serverjs/updatecards');
 const carddb = require('../../serverjs/cards');
 const examplecards = require('../../fixtures/examplecards');
-const fs = require('fs');
+
 const cardsFixturePath = 'fixtures/cards_small.json';
 
 const convertedExampleCard = {
@@ -141,16 +144,16 @@ afterEach(() => {
 
 test('updateCardbase creates the expected files', () => {
   expect.assertions(7);
-  var noopPromise = new Promise((resolve, reject) => {
+  const noopPromise = new Promise((resolve) => {
     process.nextTick(() => {
       resolve();
     });
   });
-  var downloadMock = jest.fn();
+  const downloadMock = jest.fn();
   downloadMock.mockReturnValue(noopPromise);
-  var initialDownloadDefaultCards = updatecards.downloadDefaultCards;
+  const initialDownloadDefaultCards = updatecards.downloadDefaultCards;
   updatecards.downloadDefaultCards = downloadMock;
-  return updatecards.updateCardbase(cardsFixturePath).then(function() {
+  return updatecards.updateCardbase(cardsFixturePath).then(() => {
     expect(fs.existsSync('private/cardtree.json')).toBe(true);
     expect(fs.existsSync('private/imagedict.json')).toBe(true);
     expect(fs.existsSync('private/cardimages.json')).toBe(true);
@@ -158,14 +161,14 @@ test('updateCardbase creates the expected files', () => {
     expect(fs.existsSync('private/carddict.json')).toBe(true);
     expect(fs.existsSync('private/nameToId.json')).toBe(true);
     expect(fs.existsSync('private/full_names.json')).toBe(true);
+    updatecards.downloadDefaultCards = initialDownloadDefaultCards;
   });
-  updatecards.downloadDefaultCards = initialDownloadDefaultCards;
 });
 
 test("addCardToCatalog successfully adds a card's information to the internal structures", () => {
   const card = convertedExampleCard;
   updatecards.addCardToCatalog(card);
-  var catalog = updatecards.catalog;
+  const { catalog } = updatecards;
   const normalizedFullName = card.full_name
     .toLowerCase()
     .normalize('NFD')
@@ -193,7 +196,7 @@ test("addCardToCatalog successfully adds a card's information to the internal st
 test("addCardToCatalog successfully adds a double-faced card's information to the internal structures", () => {
   const card = convertedExampleDoubleFacedCardFlipFace;
   updatecards.addCardToCatalog(card, true);
-  var catalog = updatecards.catalog;
+  const { catalog } = updatecards;
   const normalizedFullName = card.full_name
     .toLowerCase()
     .normalize('NFD')
@@ -216,9 +219,9 @@ test("addCardToCatalog successfully adds a double-faced card's information to th
 
 test('initializeCatalog clears the updatecards structures', () => {
   expect.assertions(6);
-  var contents = fs.readFileSync(cardsFixturePath);
-  var cards = JSON.parse(contents);
-  return updatecards.saveAllCards(cards).then(function() {
+  const contents = fs.readFileSync(cardsFixturePath);
+  const cards = JSON.parse(contents);
+  return updatecards.saveAllCards(cards).then(() => {
     updatecards.initializeCatalog();
     expect(Object.keys(updatecards.catalog.dict).length).toBe(0);
     expect(updatecards.catalog.names.length).toBe(0);
@@ -231,9 +234,9 @@ test('initializeCatalog clears the updatecards structures', () => {
 
 test('saveAllCards creates the expected files', () => {
   expect.assertions(7);
-  var contents = fs.readFileSync(cardsFixturePath);
-  var cards = JSON.parse(contents);
-  return updatecards.saveAllCards(cards).then(function() {
+  const contents = fs.readFileSync(cardsFixturePath);
+  const cards = JSON.parse(contents);
+  return updatecards.saveAllCards(cards).then(() => {
     expect(fs.existsSync('private/cardtree.json')).toBe(true);
     expect(fs.existsSync('private/imagedict.json')).toBe(true);
     expect(fs.existsSync('private/cardimages.json')).toBe(true);
@@ -249,14 +252,12 @@ test('convertCard returns a correctly converted card object', () => {
   expect(result).toEqual(convertedExampleCard);
 });
 
-var attribute;
-for (var convertFn in convertFnToAttribute) {
-  attribute = convertFnToAttribute[convertFn];
-  test(convertFn + " properly converts a card's " + attribute, () => {
+Object.entries(convertFnToAttribute).forEach(([convertFn, attribute]) => {
+  test(`${convertFn} properly converts a card's ${attribute}`, () => {
     const result = updatecards[convertFn](examplecards.exampleCard);
-    expect(result).toBe(convertedExampleCard[attribute]);
+    expect(result).toEqual(convertedExampleCard[attribute]);
   });
-}
+});
 
 test('convertCard returns a correctly converted double-faced card', () => {
   const result = updatecards.convertCard(examplecards.exampleDoubleFacedCard, false);
@@ -268,11 +269,9 @@ test('convertCard returns a correctly converted double-faced card flip face obje
   expect(result).toEqual(convertedExampleDoubleFacedCardFlipFace);
 });
 
-var attribute;
-for (var convertFn in convertFnToAttribute) {
-  attribute = convertFnToAttribute[convertFn];
-  test(convertFn + " properly converts a double-faced card's " + attribute, () => {
+Object.entries(convertFnToAttribute).forEach(([convertFn, attribute]) => {
+  test(`${convertFn} properly converts a double-faced card's ${attribute}`, () => {
     const result = updatecards[convertFn](examplecards.exampleDoubleFacedCard, true);
-    expect(result).toBe(convertedExampleDoubleFacedCardFlipFace[attribute]);
+    expect(result).toEqual(convertedExampleDoubleFacedCardFlipFace[attribute]);
   });
-}
+});

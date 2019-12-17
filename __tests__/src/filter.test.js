@@ -1,8 +1,9 @@
+import Filter from '../../src/util/Filter';
+
 const carddb = require('../../serverjs/cards');
-const fixturesPath = 'fixtures';
 const cubefixture = require('../../fixtures/examplecube');
 
-import Filter from '../../src/util/Filter';
+const fixturesPath = 'fixtures';
 
 describe('filter', () => {
   describe('tokenizeInput', () => {
@@ -149,13 +150,13 @@ describe('filter', () => {
     beforeAll(() => {
       exampleCube = JSON.parse(JSON.stringify(cubefixture.exampleCube));
       return carddb.initializeCardDb(fixturesPath, true).then(() => {
-        exampleCube.cards.forEach(function(card, index) {
+        exampleCube.cards.forEach((card) => {
           card.details = carddb.cardFromId(card.cardID);
         });
       });
     });
     it('properly filters names and returns a valid object', () => {
-      let tokens = [];
+      const tokens = [];
       Filter.tokenizeInput('castle', tokens);
       const castleFilters = [Filter.parseTokens(tokens)];
       const castles = exampleCube.cards.filter((card) => Filter.filterCard(card, castleFilters));
@@ -398,7 +399,7 @@ describe('filter', () => {
     });
 
     it('properly filters oracle text', () => {
-      let tokens = [];
+      const tokens = [];
       Filter.tokenizeInput('o:flying', tokens);
       const flyingFilter = [Filter.parseTokens(tokens)];
       const flyers = exampleCube.cards.filter((card) => Filter.filterCard(card, flyingFilter));
@@ -586,7 +587,7 @@ describe('filter', () => {
     describe('P/T filtering', () => {
       let tokens;
       let cards;
-      let expectations = [
+      const expectations = [
         {
           title: 'the = operator exact-matches power/toughness',
           tests: [
@@ -695,7 +696,7 @@ describe('filter', () => {
     describe('rarity filtering', () => {
       let tokens;
       let cards;
-      let expectations = [
+      const expectations = [
         {
           title: 'the = operator exact-matches rarity',
           tests: [
@@ -793,12 +794,13 @@ describe('filter', () => {
             Filter.tokenizeInput(test.filter, tokens);
             cards = exampleCube.cards.filter((card) => Filter.filterCard(card, [Filter.parseTokens(tokens)]));
             cards.forEach((card) => {
-              let { expectedValue, matcherName, not } = test;
+              const { not } = test;
+              let { expectedValue, matcherName } = test;
               let value = card;
               test.lookup.forEach((key) => {
                 value = value[key];
               });
-              let expectation = expect(value);
+              expectation = expect(value);
               if (not) {
                 // not.arrayContaining is a special case
                 if (matcherName === 'arrayContaining') {

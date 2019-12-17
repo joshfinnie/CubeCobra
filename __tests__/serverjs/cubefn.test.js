@@ -1,9 +1,11 @@
-var sinon = require('sinon');
+/* eslint-disable no-underscore-dangle */
+const sinon = require('sinon');
+
 const cubefn = require('../../serverjs/cubefn');
 const carddb = require('../../serverjs/cards');
 const cubefixture = require('../../fixtures/examplecube');
 const landsfixture = require('../../fixtures/examplelands');
-let Cube = require('../../models/cube');
+const Cube = require('../../models/cube');
 
 const fixturesPath = 'fixtures';
 
@@ -52,7 +54,7 @@ test('build_id_query returns a simple query when passed a 24-character alphanume
 test('build_id_query returns a boolean query when passed a non-alphanumeric string', () => {
   const testId = 'a1a-a1a1a1a1a1a1a1a1a1a1';
   const result = cubefn.build_id_query(testId);
-  const condition = result['$or'];
+  const condition = result.$or;
   expect(condition.length).toBe(2);
   expect(condition[0].shortID).toBe(testId);
   expect(condition[1].urlAlias).toBe(testId);
@@ -107,20 +109,20 @@ test('legalityToInt returns the expected values', () => {
 });
 
 test('generate_short_id returns a valid short ID', async () => {
-  var dummyModel = {
+  const dummyModel = {
     shortID: '1x',
     urlAlias: 'a real alias',
   };
-  var queryMockPromise = new Promise((resolve, reject) => {
+  const queryMockPromise = new Promise((resolve, reject) => {
     process.nextTick(() => {
       resolve([dummyModel]);
     });
   });
-  var queryMock = jest.fn();
+  const queryMock = jest.fn();
   queryMock.mockReturnValue(queryMockPromise);
-  var initialCubeFind = Cube.find;
+  const initialCubeFind = Cube.find;
   Cube.find = queryMock;
-  var result = await cubefn.generate_short_id();
+  const result = await cubefn.generate_short_id();
   expect(result).toBe('1y');
   Cube.find = initialCubeFind;
 });
@@ -141,10 +143,11 @@ test('getBasics returns the expected set of basic lands', () => {
     swamp: 'https://img.scryfall.com/cards/normal/front/8/3/8365ab45-6d78-47ad-a6ed-282069b0fabc.jpg?1565989387',
     island: 'https://img.scryfall.com/cards/normal/front/0/c/0c4eaecf-dd4c-45ab-9b50-2abe987d35d4.jpg?1565989364',
   };
-  var mockCarddict = {};
-  var expected = {};
-  var exampleLand, expectedLandObject;
-  basicLands.forEach(function(name) {
+  const mockCarddict = {};
+  const expected = {};
+  let exampleLand;
+  let expectedLandObject;
+  basicLands.forEach((name) => {
     mockCarddict[mockNameToId[name.toLowerCase()]] = landsfixture.exampleBasics[name.toLowerCase()];
     exampleLand = landsfixture.exampleBasics[name.toLowerCase()];
     expectedLandObject = {
@@ -162,7 +165,7 @@ test('getBasics returns the expected set of basic lands', () => {
 
   const result = cubefn.getBasics(carddb);
   expect(result).toEqual(expected);
-  basicLands.forEach(function(name) {
+  basicLands.forEach((name) => {
     expect(result[name].details).toEqual(expected[name].details);
   });
 
@@ -172,10 +175,10 @@ test('getBasics returns the expected set of basic lands', () => {
 
 test('setCubeType correctly sets the type and card_count of its input cube', () => {
   expect.assertions(4);
-  var exampleCube = JSON.parse(JSON.stringify(cubefixture.exampleCube));
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
-    var result = cubefn.setCubeType(exampleCube, carddb);
+  const exampleCube = JSON.parse(JSON.stringify(cubefixture.exampleCube));
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
+    const result = cubefn.setCubeType(exampleCube, carddb);
     expect(result.card_count).toBe(exampleCube.cards.length);
     expect(result.type).toBe('Standard');
     expect(exampleCube.card_count).toBe(exampleCube.cards.length);
@@ -193,8 +196,8 @@ test('sanitize allows the correct tags', () => {
 
 test('addAutocard correctly replaces autocard format strings', () => {
   expect.assertions(1);
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
     const exampleHtml = '<div>lkgdfsge</div><strong>[[Embercleave]]</strong><ol><li>gfgwwerer</li></ol>';
     const expected =
       '<div>lkgdfsge</div><strong><a class="autocard" card="https://img.scryfall.com/cards/normal/front/9/3/939b8bcc-b9ac-4d8c-9db4-2bf91a853f03.jpg?1571537886">Embercleave</a></strong><ol><li>gfgwwerer</li></ol>';
@@ -206,14 +209,14 @@ test('addAutocard correctly replaces autocard format strings', () => {
 test('generatePack generates a valid pack of cards', () => {
   expect.assertions(16);
   const seed = 1569704729;
-  var exampleCube = JSON.parse(JSON.stringify(cubefixture.exampleCube));
+  const exampleCube = JSON.parse(JSON.stringify(cubefixture.exampleCube));
   Cube.findOne.yields(null, exampleCube);
-  var callback = sinon.stub();
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
+  const callback = sinon.stub();
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
     cubefn.generatePack('', carddb, seed, callback);
-    var argument = callback.getCall(0).args[1];
-    argument.pack.forEach(function(card, index) {
+    const argument = callback.getCall(0).args[1];
+    argument.pack.forEach((card, index) => {
       expect(card).toEqual(cubefixture.examplePack.pack[index]);
     });
     expect(argument.seed).toBe(seed);

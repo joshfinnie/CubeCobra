@@ -23,9 +23,9 @@ test('GetColorIdentity returns the expected results', () => {
 
 test('GetTypeByColor returns valid counts', () => {
   expect.assertions(1);
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
-    var expected = {
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
+    const expected = {
       Artifacts: {
         Black: 0,
         Blue: 2,
@@ -107,14 +107,14 @@ test('GetTypeByColor returns valid counts', () => {
         White: 11,
       },
     };
-    var result = analytics.GetTypeByColor(cubefixture.exampleCube.cards, carddb);
+    const result = analytics.GetTypeByColor(cubefixture.exampleCube.cards, carddb);
     expect(result).toEqual(expected);
   });
 });
 
 test('GetColorCounts returns valid counts', () => {
   expect.assertions(1);
-  var expected = {
+  const expected = {
     Abzan: 0,
     Azorius: 1,
     Bant: 0,
@@ -147,16 +147,16 @@ test('GetColorCounts returns valid counts', () => {
     Temur: 0,
     White: 5,
   };
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
-    var result = analytics.GetColorCounts(cubefixture.exampleCube.cards, carddb);
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
+    const result = analytics.GetColorCounts(cubefixture.exampleCube.cards, carddb);
     expect(result).toEqual(expected);
   });
 });
 
 test('GetCurve returns a valid curve structure', () => {
   expect.assertions(1);
-  var expected = {
+  const expected = {
     black: [0, 1, 2, 3, 0, 1, 0, 0, 0, 0],
     blue: [0, 1, 3, 6, 0, 0, 0, 0, 0, 0],
     colorless: [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
@@ -166,9 +166,9 @@ test('GetCurve returns a valid curve structure', () => {
     total: [0, 7, 16, 19, 7, 3, 5, 1, 0, 0],
     white: [0, 2, 3, 4, 0, 1, 1, 0, 0, 0],
   };
-  var promise = carddb.initializeCardDb(fixturesPath, true);
-  return promise.then(function() {
-    var result = analytics.GetCurve(cubefixture.exampleCube.cards, carddb);
+  const promise = carddb.initializeCardDb(fixturesPath, true);
+  return promise.then(() => {
+    const result = analytics.GetCurve(cubefixture.exampleCube.cards, carddb);
     expect(result).toEqual(expected);
   });
 });
