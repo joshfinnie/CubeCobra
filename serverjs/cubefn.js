@@ -2,13 +2,13 @@ const sanitizeHtml = require('sanitize-html');
 const Cube = require('../models/cube');
 const util = require('./util');
 
-function get_cube_id(cube) {
+function getCubeId(cube) {
   if (cube.urlAlias) return cube.urlAlias;
   if (cube.shortID) return cube.shortID;
   return cube._id;
 }
 
-function build_id_query(id) {
+function buildIdQuery(id) {
   if (!id || id.match(/^[0-9a-fA-F]{24}$/)) {
     return {
       _id: id,
@@ -26,7 +26,7 @@ function build_id_query(id) {
   };
 }
 
-async function generate_short_id() {
+async function generateShortId() {
   let cubes = await Cube.find({}, ['shortID', 'urlAlias']);
 
   const short_ids = cubes.map((cube) => cube.shortID);
@@ -208,7 +208,7 @@ var methods = {
     return src;
   },
   generatePack: function(cubeId, carddb, seed, callback) {
-    Cube.findOne(build_id_query(cubeId), function(err, cube) {
+    Cube.findOne(buildIdQuery(cubeId), function(err, cube) {
       if (!cube) {
         callback(true);
       }
@@ -225,9 +225,9 @@ var methods = {
       });
     });
   },
-  generate_short_id,
-  build_id_query,
-  get_cube_id,
+  generateShortId,
+  buildIdQuery,
+  getCubeId,
   intToLegality,
   legalityToInt,
 };

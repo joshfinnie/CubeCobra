@@ -16,42 +16,42 @@ afterEach(() => {
   carddb.unloadCardDb();
 });
 
-test('get_cube_id returns urlAlias when defined', () => {
+test('getCubeId returns urlAlias when defined', () => {
   const testCube = {
     urlAlias: 'a',
     shortID: 'bbb',
     _id: 'c',
   };
-  const result = cubefn.get_cube_id(testCube);
+  const result = cubefn.getCubeId(testCube);
   expect(result).toBe(testCube.urlAlias);
 });
 
-test('get_cube_id returns shortId when urlAlias is not present', () => {
+test('getCubeId returns shortId when urlAlias is not present', () => {
   const testCube = {
     shortID: 'bbb',
     _id: 'c',
   };
-  const result = cubefn.get_cube_id(testCube);
+  const result = cubefn.getCubeId(testCube);
   expect(result).toBe(testCube.shortID);
 });
 
-test('get_cube_id returns _id when other ID fields are not present', () => {
+test('getCubeId returns _id when other ID fields are not present', () => {
   const testCube = {
     _id: 'c',
   };
-  const result = cubefn.get_cube_id(testCube);
+  const result = cubefn.getCubeId(testCube);
   expect(result).toBe(testCube._id);
 });
 
-test('build_id_query returns a simple query when passed a 24-character alphanumeric string', () => {
+test('buildIdQuery returns a simple query when passed a 24-character alphanumeric string', () => {
   const testId = 'a1a1a1a1a1a1a1a1a1a1a1a1';
-  const result = cubefn.build_id_query(testId);
+  const result = cubefn.buildIdQuery(testId);
   expect(result._id).toBe(testId);
 });
 
-test('build_id_query returns a boolean query when passed a non-alphanumeric string', () => {
+test('buildIdQuery returns a boolean query when passed a non-alphanumeric string', () => {
   const testId = 'a1a-a1a1a1a1a1a1a1a1a1a1';
-  const result = cubefn.build_id_query(testId);
+  const result = cubefn.buildIdQuery(testId);
   const condition = result['$or'];
   expect(condition.length).toBe(2);
   expect(condition[0].shortID).toBe(testId);
@@ -108,21 +108,21 @@ test('legalityToInt returns the expected values', () => {
   expect(cubefn.legalityToInt('not a format')).toBe(undefined);
 });
 
-test('generate_short_id returns a valid short ID', async () => {
-  var dummyModel = {
+test('generateShortId returns a valid short ID', async () => {
+  const dummyModel = {
     shortID: '1x',
     urlAlias: 'a real alias',
   };
-  var queryMockPromise = new Promise((resolve, reject) => {
+  const queryMockPromise = new Promise((resolve) => {
     process.nextTick(() => {
       resolve([dummyModel]);
     });
   });
-  var queryMock = jest.fn();
+  const queryMock = jest.fn();
   queryMock.mockReturnValue(queryMockPromise);
-  var initialCubeFind = Cube.find;
+  const initialCubeFind = Cube.find;
   Cube.find = queryMock;
-  var result = await cubefn.generate_short_id();
+  const result = await cubefn.generateShortId();
   expect(result).toBe('1y');
   Cube.find = initialCubeFind;
 });
