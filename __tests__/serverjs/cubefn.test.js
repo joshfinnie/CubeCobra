@@ -1,9 +1,9 @@
-var sinon = require('sinon');
+const sinon = require('sinon');
 const cubefn = require('../../serverjs/cubefn');
 const carddb = require('../../serverjs/cards');
 const cubefixture = require('../../fixtures/examplecube');
 const landsfixture = require('../../fixtures/examplelands');
-let Cube = require('../../models/cube');
+const Cube = require('../../models/cube');
 
 const fixturesPath = 'fixtures';
 
@@ -16,30 +16,30 @@ afterEach(() => {
   carddb.unloadCardDb();
 });
 
-test('get_cube_id returns urlAlias when defined', () => {
+test('getCubeId returns urlAlias when defined', () => {
   const testCube = {
     urlAlias: 'a',
     shortID: 'bbb',
     _id: 'c',
   };
-  const result = cubefn.get_cube_id(testCube);
+  const result = cubefn.getCubeId(testCube);
   expect(result).toBe(testCube.urlAlias);
 });
 
-test('get_cube_id returns shortId when urlAlias is not present', () => {
+test('getCubeId returns shortId when urlAlias is not present', () => {
   const testCube = {
     shortID: 'bbb',
     _id: 'c',
   };
-  const result = cubefn.get_cube_id(testCube);
+  const result = cubefn.getCubeId(testCube);
   expect(result).toBe(testCube.shortID);
 });
 
-test('get_cube_id returns _id when other ID fields are not present', () => {
+test('getCubeId returns _id when other ID fields are not present', () => {
   const testCube = {
     _id: 'c',
   };
-  const result = cubefn.get_cube_id(testCube);
+  const result = cubefn.getCubeId(testCube);
   expect(result).toBe(testCube._id);
 });
 

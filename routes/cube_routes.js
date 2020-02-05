@@ -11,7 +11,7 @@ var {
   getBasics,
   generate_short_id,
   build_id_query,
-  get_cube_id,
+  getCubeId,
   addCardHtml,
   removeCardHtml,
   replaceCardHtml,
@@ -1663,7 +1663,7 @@ router.get('/draft/:id', async (req, res) => {
 
     const reactProps = {
       cube,
-      cubeID: get_cube_id(cube),
+      cubeID: getCubeId(cube),
       initialDraft: draft,
     };
 
@@ -2564,7 +2564,7 @@ router.get('/deckbuilder/:id', async (req, res) => {
 
     const reactProps = {
       cube: cube,
-      cubeID: get_cube_id(cube),
+      cubeID: getCubeId(cube),
       initialDeck: deck,
       basics: getBasics(carddb),
     };
@@ -2659,7 +2659,7 @@ router.get('/deck/:id', async (req, res) => {
 
       var reactProps = {
         cube,
-        cubeID: get_cube_id(cube),
+        cubeID: getCubeId(cube),
         oldFormat: true,
         drafter,
         cards: player_deck,
@@ -2708,7 +2708,7 @@ router.get('/deck/:id', async (req, res) => {
 
       var reactProps = {
         cube,
-        cubeID: get_cube_id(cube),
+        cubeID: getCubeId(cube),
         oldFormat: false,
         drafter,
         deck: deck.playerdeck,

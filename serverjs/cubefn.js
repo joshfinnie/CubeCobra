@@ -3,7 +3,7 @@ const Cube = require('../models/cube');
 const CardRating = require('../models/cardrating');
 const util = require('./util');
 
-function get_cube_id(cube) {
+function getCubeId(cube) {
   if (cube.urlAlias) return cube.urlAlias;
   if (cube.shortID) return cube.shortID;
   return cube._id;
@@ -343,7 +343,7 @@ var methods = {
   },
   generate_short_id,
   build_id_query,
-  get_cube_id,
+  getCubeId,
   intToLegality,
   legalityToInt,
   addCardHtml,
